@@ -1,10 +1,10 @@
 * Fall 2020 - Lab 06
 
-* Last name:
+* Last name: Burlacu
 
-* First name:
+* First name: Luca
 
-* GitHub username:
+* GitHub username: LucaJetB
 
 * Notes:
 
