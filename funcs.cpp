@@ -173,3 +173,40 @@ std::string decryptVigenere(std::string ciphertext, std::string keyword)
   return vigenere;
 }
 
+#define NUM_LETTERS ('Z' - 'A' + 1)
+
+int argmax(int arr[], int size)
+{
+	if(size == 0)
+		return -1;
+	
+	int index = 0;
+	int max = arr[0];
+	for(int i = 0; i < size; i++)
+	{	
+		if(arr[i] > max)
+		{
+			max = arr[i];
+			index = i;
+		}
+	}
+
+	return index;
+}
+
+std::string decrypt(std::string text)
+{
+	int freq[NUM_LETTERS] = {};
+	for(int i = 0; i < text.length(); i++)
+	{
+		char c = text[i];
+		c = tolower(c);
+		c = c - 'a';
+		freq[c] += 1;
+	}
+	int freqMaxIndex = argmax(freq, NUM_LETTERS);
+	char mostFreqChar = 'a' + freqMaxIndex;
+	int shift = 'e' - mostFreqChar;
+	return encryptCaesar(text, shift);
+}		
+

@@ -10,7 +10,7 @@ int main()
   c = shiftChar('a', 3);
   std::cout << c << std::endl;
   std:: string str;
-  str = encryptCaesar("Way to Go!", 10);
+  str = encryptCaesar("Evel Knievel", 10);
   std::cout << str << std::endl;
   str = encryptVigenere("Hello, World!", "cake");
   std::cout << str << std::endl;

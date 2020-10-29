@@ -7,6 +7,7 @@ TEST_CASE("Caesar")
   CHECK(encryptCaesar("Way to Go!", 5) == "Bfd yt Lt!");
   CHECK(encryptCaesar("Hello, World!", 10) == "Rovvy, Gybvn!");
   CHECK(encryptCaesar("Hello, World!", -5) == "Czggj, Rjmgy!");
+  
 }
 
 
@@ -28,4 +29,9 @@ TEST_CASE("Decrypt Vigenere")
 {
   CHECK(decryptVigenere("Jevpq, Wyvnd!", "cake") == "Hello, World!");
   CHECK(decryptVigenere("ACEDFHG", "abc") == "ABCDEFG");
+}
+
+TEST_CASE("Decrypt Caesar no shift")
+{
+  CHECK(decrypt("Ofov Uxsofov") == "Evel Knievel");
 }
