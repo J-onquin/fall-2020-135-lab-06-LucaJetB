@@ -13,110 +13,60 @@ void test_ascii(std::string str)
 
 char shiftChar(char c, int rshift)
 {
-  c = c + rshift;
-  return c;
-}
-
-std::string encryptCaesar(std::string plaintext, int rshift)
-{
-  std::string ceaserText;
-  char c;
-  int shift = 0;
-  for(int i = 0; i < plaintext.length(); i++)
+  if(isupper(c))
     {
-      c = plaintext[i];
-
-      if((c < 123) && (c > 96))
-	{
-	  if((c + rshift) > 127)
-	    {
-	    shift = (c + rshift) - 122;
-	    c = 96 + shift;
-	    }
-	  else
-	    c = c + rshift;
-
-	  if(rshift > -1)
-	    {
-	      if(c > 122)
-		c = c - 26;
-	    }
-	  
-	  if(rshift < 0)
-	    {
-	      if(c < 97)
-		{
-		  c = c - 97;
-		  c = 123 + c;
-		}
-	    }
-	}
-  
-      if((c < 91) && (c > 64))
-	{
-	  c = shiftChar(c, rshift);
-	  if(rshift > -1)
-	    {
-	      if(c > 90)
-		c = c - 26;
-	    }
-	  if(rshift < 0)
-	    {
-	      if(c < 65)
-		{
-		  c = c - 64;
-		  c = 90 + c;
-		}
-	    }
-	}
-      ceaserText += c;
+      int changeChar = ((int)c - 65 + rshift) % 26 + 65;
+      return (char)changeChar;
     }
-  return ceaserText;
+  else if(islower(c)) 
+    {
+      int changeChar = ((int)c - 97 + rshift) % 26 + 97;
+      return (char)changeChar;
+    }
+
+  else
+    {
+      return c;
+    }
 }
 
+std::string encryptCaesar(std::string plaintext,int rshift)
+{
+  std::string result = "";
+
+  for (int i = 0; i < plaintext.length(); i++)
+    {
+      result += shiftChar(plaintext[i],rshift);
+    }
+  return result;
+}
 
 std::string encryptVigenere(std::string plaintext, std::string keyword)
 {
-  std::string vigenere;
-  char c;
-  int k = 0;
-  int shift = 0;
-  for(int j = 0; j < keyword.length(); j++)
-    keyword[j] = std::tolower(keyword[j]);
+  std::string encryption = "";
+  int num = 0;
 
-  for(int i = 0; i < plaintext.length(); i++)
+  for (int i = 0; i < plaintext.length(); i++)
     {
-      if(k > keyword.length() - 1)
-	k = 0;
-      int rshift = (int)keyword[k] - 97;
-      c = plaintext[i];
+      char current = plaintext[i];
 
-      if((c < 123) && (c > 96))
+      if(isupper(current))
 	{
-	  if((int)c + rshift > 127)
-	    {
-	      shift = ((int)c + rshift) - 127;
-	      c = 97 + shift;
-	    }
-	  else
-	    c = c + rshift;
-
-	  if(c > 122)
-	    c = c - 26;
-
-	  k++;
+	  int shiftNum = keyword[num] - 'a';
+	  num = (num + 1) % keyword.length();
+	  int newPosition = (current - 'A' + shiftNum) % 26;
+	  current = 'A' + newPosition;
 	}
-      if((c < 91) && (c > 64))
+      else if (islower(current))
 	{
-	  c = c + rshift;
-	  if(c > 90)
-	    c = c - 26;
-	  k++;
+	  int shiftNum = keyword[num]-'a';
+	  num = (num + 1) % keyword.length();
+	  int newPosition = (current - 'a' + shiftNum) % 26;
+	  current = 'a' + newPosition;
 	}
- 
-      vigenere += c;
+      encryption += current;
     }
-  return vigenere;
+  return encryption;
 }
 
 std::string decryptCaesar(std::string ciphertext, int rshift)
@@ -127,50 +77,32 @@ std::string decryptCaesar(std::string ciphertext, int rshift)
   return decrypt;
 }
 
-std::string decryptVigenere(std::string ciphertext, std::string keyword)
+std::string decryptVigenere(std::string cipheredtext, std::string keyword)
 {
-  std::string vigenere;
-  char c;
-  int k = 0;
-  int shift = 0;
-  for(int j = 0; j < keyword.length(); j++)
-    keyword[j] = std::tolower(keyword[j]);
+  std::string decrypted = "";
+  int num = 0;
+  int shiftNum;
 
-  for(int i = 0; i < ciphertext.length(); i++)
+  for (int i = 0;i < cipheredtext.length(); i++)
     {
-      if(k > keyword.length() - 1)
-	k = 0;
-      
-      int rshift = (int)keyword[k] - 97;
-      rshift = rshift * -1;
-      c = ciphertext[i];
-     
-      if((c < 123) && (c > 96))
-	{
-	  c = c + rshift;
-	  if(c < 97)
-	    c = c + 26;
+      char current = cipheredtext[i];
 
-	  k++;
-	}
-      if((c < 91) && (c > 64))
+      if (isupper(current))
 	{
-	  if((int)c + rshift < 64)
-	    {
-	      shift = 64 - ((int)c + rshift);
-	      c = 90 -  shift;
-	    }
-	  else
-	    c = c + rshift;
-	  
-	  if(c > 90)
-	    c = c - 26;
-	  k++;
+	  shiftNum = keyword[num] - 'a';
+	  num = (num + 1) % keyword.length();
+	  current = 'A' + (current - 'A' - shiftNum + 26) % 26;
 	}
-      
-      vigenere += c;
+      else if (islower(current))
+	{
+	  shiftNum = keyword[num]-'a';
+	  num = (num + 1) % keyword.length();
+	  current = 'a' + (current - 'a' - shiftNum + 26) % 26;
+	}
+      decrypted += current;
+
     }
-  return vigenere;
+  return decrypted;
 }
 
 #define NUM_LETTERS ('Z' - 'A' + 1)
